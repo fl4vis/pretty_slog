@@ -24,7 +24,7 @@ func main() {
 	simulateDatabaseOperation()
 	simulateAuthFlow()
 	simulateErrorScenario()
-
+	simulateComplexData()
 }
 
 func simulateAPIRequest() {
@@ -107,5 +107,76 @@ func simulateErrorScenario() {
 		"status_code", 503,
 		"error", "service unavailable",
 		"retry_after", 30,
+	)
+}
+
+func simulateComplexData() {
+	// Test arrays, nested objects, null values, and booleans
+	slog.Info("User profile fetched",
+		"user_id", "user_999",
+		"tags", []string{"premium", "verified", "developer"},
+		"permissions", []string{"read", "write", "admin"},
+		"scores", []int{85, 92, 78, 95},
+	)
+
+	slog.Debug("Cache status check",
+		"redis_connected", true,
+		"memcached_connected", false,
+		"fallback_enabled", true,
+		"primary_cache", "redis",
+		"backup_cache", nil,
+	)
+
+	slog.Info("Order details",
+		"order_id", "ord_12345",
+		"items", []map[string]any{
+			{"name": "Laptop", "price": 999.99, "quantity": 1, "in_stock": true},
+			{"name": "Mouse", "price": 29.99, "quantity": 2, "in_stock": true},
+			{"name": "Monitor", "price": 349.99, "quantity": 1, "in_stock": false},
+		},
+		"discount_applied", false,
+		"total", 1409.96,
+		"shipping_address", nil,
+	)
+
+	slog.Warn("Feature flags evaluated",
+		"user_id", "user_555",
+		"flags", map[string]any{
+			"new_ui":           true,
+			"beta_features":    false,
+			"dark_mode":        true,
+			"analytics":        true,
+			"experimental_api": nil,
+		},
+		"evaluation_ms", 12,
+	)
+
+	slog.Info("User profile fetched",
+		"user_id", "user_999",
+		"tags", []string{"premium", "verified", "developer"},
+		"permissions", []string{"read", "write", "admin"},
+		"scores", []int{85, 92, 78, 95},
+		"recent_logins", []int64{1699564800, 1699651200, 1699737600},
+	)
+
+	slog.Debug("Feature toggles",
+		"enabled_features", []string{"dark_mode", "notifications", "analytics"},
+		"disabled_features", []string{},
+		"beta_flags", []bool{true, false, true, true},
+	)
+
+	slog.Error("Batch job failed",
+		"job_id", "batch_777",
+		"total_items", 1000,
+		"processed", 847,
+		"failed", 153,
+		"success_rate", 0.847,
+		"errors", []map[string]any{
+			{"item_id": "item_1", "error": "invalid format", "retry": true},
+			{"item_id": "item_2", "error": "timeout", "retry": false},
+			{"item_id": "item_3", "error": "not found", "retry": nil},
+		},
+		"will_retry", true,
+		"next_attempt", nil,
 	)
 }

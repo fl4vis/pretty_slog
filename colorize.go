@@ -2,6 +2,7 @@ package pretty_slog
 
 import (
 	"bytes"
+	"unicode"
 )
 
 const (
@@ -61,12 +62,21 @@ func ColorizeJSON(data []byte) string {
 			}
 
 		case ':':
+			if isQuote {
+				prev := rune(data[i - 1])
+				if unicode.IsLetter(prev) || unicode.IsDigit(prev) {
+					buf.WriteByte(char)
+					continue
+				}
+			}
+
 			buf.WriteString(WHITE)
 			buf.WriteByte(char)
 			buf.WriteString(RESET)
 
-			if semicolonPosition == 0 {
+			if semicolonPosition == LEFT {
 				semicolonPosition = RIGHT
+				isQuote = false
 			} else {
 				semicolonPosition = LEFT
 			}
