@@ -1,4 +1,4 @@
-package pretty
+package pretty_slog
 
 import (
 	"bytes"
@@ -51,9 +51,9 @@ func (h *Handler) Handle(ctx context.Context, r slog.Record) error {
 
 	switch r.Level {
 	case slog.LevelDebug:
-		level = Colorize(CYAN, level)
+		level = Colorize(GRAY, level)
 	case slog.LevelInfo:
-		level = Colorize(GREEN, level)
+		level = Colorize(CYAN, level)
 	case slog.LevelWarn:
 		level = Colorize(YELLOW, level)
 	case slog.LevelError:
@@ -93,7 +93,7 @@ func (h *Handler) Handle(ctx context.Context, r slog.Record) error {
 		Colorize(PURPLE, r.Time.Format(TIME_FORMAT)),
 		level,
 		Colorize(WHITE, r.Message),
-		Colorize(BLUE, string(bytes)),
+		ColorizeJSON(bytes),
 	)
 
 	return nil
