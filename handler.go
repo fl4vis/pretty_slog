@@ -67,14 +67,12 @@ func (h *Handler) Handle(ctx context.Context, r slog.Record) error {
 
 	// If Error log, add file and line info
 	if r.Level == slog.LevelError {
-		pc, file, line, ok := runtime.Caller(3) // Adjust depth as needed
-		if ok {
-			fn := runtime.FuncForPC(pc) // Get function name
-			attrs["source"] = map[string]any{
-				"file":     file,
-				"function": fn.Name(),
-				"line":     line,
-			}
+		fs := runtime.CallersFrames([]uintptr{r.PC})
+		f, _ := fs.Next()
+		attrs["source"] = map[string]any{
+			"file":     f.File,
+			"function": f.Function,
+			"line":     f.Line,
 		}
 	}
 
